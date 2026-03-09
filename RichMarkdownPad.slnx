@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/RichMarkdownPad.HostApp/RichMarkdownPad.HostApp.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/RichMarkdownPad.Controller/RichMarkdownPad.Controller.csproj" />
+  </Folder>
+</Solution>

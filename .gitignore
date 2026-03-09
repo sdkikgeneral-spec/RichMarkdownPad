@@ -1,0 +1,26 @@
+# Build output
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ReSharper / Rider
+_ReSharper*/
+*.DotSettings.user
+.idea/
+
+# NuGet
+*.nupkg
+*.snupkg
+
+# Logs
+*.log
+
+# Generated files
+*.g.cs
+*.g.i.cs
