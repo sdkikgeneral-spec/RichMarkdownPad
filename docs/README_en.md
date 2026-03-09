@@ -5,12 +5,19 @@ Language: [Japanese](../README.md) | English
 RichMarkdownPad is a project to build a rich textbox controller for WPF that enables Markdown editing with real-time preview.
 
 ## Project Status
-- Phase: Specification completed, implementation preparation in progress
+- Phase: MVP implementation in progress (core features and test foundation are in place)
 - Confirmed decisions:
   - Framework: .NET 10
   - UI: WPF (MVVM)
   - Markdown renderer: Markdig
   - Preview engine: WebView2
+
+## Implemented
+- `MarkdownEditorControl` (two-pane layout + `GridSplitter`)
+- Live preview via Markdig + WebView2 (debounced updates)
+- Dirty-state notification and Open/Save request events
+- Real host-side file I/O in sample app (Open/Save dialogs, unsaved-change prompts)
+- xUnit tests (file service, complex markdown ingestion, verbose logs)
 
 ## Goals (MVP)
 - Provide an embeddable `UserControl` for host screens
@@ -30,12 +37,11 @@ RichMarkdownPad is a project to build a rich textbox controller for WPF that ena
 - Preview rendering via WebView2 `NavigateToString`
 
 ## Development Plan
-1. Build controller `UserControl` (two-pane layout)
-2. Implement ViewModel and host-notification commands
-3. Implement Markdig renderer
-4. Integrate WebView2 preview
-5. Add host integration and exception handling
-6. Prepare tests
+1. Refine public controller API (dependency properties, event contracts)
+2. Expand tests (UI integration, regression, stress cases)
+3. Prepare distribution model (NuGet packaging)
+4. Expand docs and samples
 
 ## Notes
-- This is the initial English README and will be updated as implementation progresses.
+- Test command: `dotnet test RichMarkdownPad.slnx`
+- Verbose ingestion logs: `dotnet test tests/RichMarkdownPad.HostApp.Tests/RichMarkdownPad.HostApp.Tests.csproj --logger "console;verbosity=detailed"`

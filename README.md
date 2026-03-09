@@ -5,12 +5,19 @@ Language: Japanese | [English](docs/README_en.md)
 WPFでMarkdownを編集し、リアルタイムプレビューを確認できるリッチテキストボックス・コントローラーを開発するプロジェクトです。
 
 ## Project Status
-- フェーズ: 仕様策定完了、実装準備中
+- フェーズ: MVP実装進行中（コア機能とテスト基盤を実装済み）
 - 現在の確定事項:
   - Framework: .NET 10
   - UI: WPF（MVVM）
   - Markdown renderer: Markdig
   - Preview engine: WebView2
+
+## Implemented
+- `MarkdownEditorControl`（2ペイン + `GridSplitter`）
+- Markdig + WebView2 によるライブプレビュー（デバウンス更新）
+- Dirty状態通知、Open/Save要求イベント
+- サンプルホストでの実ファイルI/O（Open/Saveダイアログ、未保存確認）
+- xUnitテスト（ファイルサービス、複雑Markdown流し込み、詳細ログ出力）
 
 ## Goals (MVP)
 - ホスト画面に埋め込み可能な`UserControl`を提供
@@ -30,12 +37,11 @@ WPFでMarkdownを編集し、リアルタイムプレビューを確認できる
 - WebView2の`NavigateToString`でプレビュー反映
 
 ## Development Plan
-1. コントローラー`UserControl`作成（2ペイン）
-2. ViewModelとホスト通知コマンド実装
-3. Markdigレンダラー実装
-4. WebView2連携
-5. ホスト連携と例外処理
-6. テスト整備
+1. コントローラー公開APIの整理（依存プロパティ、イベント契約）
+2. テスト拡充（UI連携、回帰ケース、負荷ケース）
+3. 配布形態の整備（NuGet化検討）
+4. ドキュメント/サンプルの拡充
 
 ## Notes
-- このREADMEは初版です。実装の進行に合わせて更新します。
+- テスト実行例: `dotnet test RichMarkdownPad.slnx`
+- 詳細ログ付き実行例: `dotnet test tests/RichMarkdownPad.HostApp.Tests/RichMarkdownPad.HostApp.Tests.csproj --logger "console;verbosity=detailed"`

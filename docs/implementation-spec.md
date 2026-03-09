@@ -16,6 +16,9 @@
 - `src/RichMarkdownPad.Controller/Models/`
 - `src/RichMarkdownPad.Controller/Services/`
 - `samples/RichMarkdownPad.HostApp/`（動作確認用）
+- `samples/RichMarkdownPad.HostApp/Services/`（ホスト側I/O）
+- `tests/RichMarkdownPad.HostApp.Tests/`（自動テスト）
+- `tests/RichMarkdownPad.HostApp.Tests/TestData/MarkdownSamples/`（投入サンプル）
 
 ## 4. 主要コンポーネント
 ### 4.1 View
@@ -38,6 +41,8 @@
   - MarkdigでMarkdown -> HTMLへ変換
 - `IEditorHostBridge`
   - ファイルI/Oやダイアログはホスト側へ委譲
+- `IDocumentFileService` / `DocumentFileService`（HostApp側）
+  - 実ファイルの読込/保存（UTF-8 BOMなし保存）
 
 ## 5. イベントフロー
 1. ユーザーがエディタに入力
@@ -61,10 +66,13 @@
 - 単体テスト
   - Markdown変換結果（主要記法）
   - ホスト通知（Dirty遷移、保存要求イベント）
-  - デバウンス制御の発火条件
+  - ファイルサービスの保存/読込とエンコーディング
 - 手動テスト
   - 大きなテキスト入力時の操作感
   - ホストアプリに埋め込んだ際の連携確認
+- データ駆動テスト
+  - 複数Markdownサンプル（基本/複雑/プロンプト風）を流し込み
+  - 詳細ログで投入本文とレンダリング結果を確認
 
 ## 9. 実装順序（MVP）
 - [x] `UserControl`シェル（2ペイン）
@@ -78,3 +86,10 @@
 ## 10. 更新履歴
 - 2026-03-09: 初版作成（specsheet.mdから分離）
 - 2026-03-09: コントローラー開発を主目的とする構成へ更新
+- 2026-03-09: HostAppの実ファイルI/O実装とテスト構成を反映
+
+## 11. 検証コマンド
+- ソリューション全体テスト:
+  - `dotnet test RichMarkdownPad.slnx`
+- Markdown投入ログを詳細表示:
+  - `dotnet test tests/RichMarkdownPad.HostApp.Tests/RichMarkdownPad.HostApp.Tests.csproj --logger "console;verbosity=detailed"`
