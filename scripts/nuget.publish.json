@@ -11,7 +11,7 @@
   },
   "package": {
     "id": "RichMarkdownPad.Controller",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "authors": "sdkikgeneral-spec",
     "company": "sdkikgeneral-spec",
     "description": "Reusable WPF markdown editor controller with live WebView2 preview.",

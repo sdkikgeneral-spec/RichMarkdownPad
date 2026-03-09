@@ -6,11 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <PackageId>RichMarkdownPad.Controller</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>sdkikgeneral-spec</Authors>
     <Company>sdkikgeneral-spec</Company>
     <Description>Reusable WPF markdown editor controller with live WebView2 preview.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>wpf;markdown;webview2;editor;controller</PackageTags>
     <PackageProjectUrl>https://github.com/sdkikgeneral-spec/RichMarkdownPad</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sdkikgeneral-spec/RichMarkdownPad</RepositoryUrl>
@@ -23,6 +24,10 @@
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.37.0" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3351.48" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
   </ItemGroup>
 
 </Project>
