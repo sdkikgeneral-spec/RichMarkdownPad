@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using Microsoft.Win32;
+using System.ComponentModel;
+using System.IO;
+using System.Text;
+using System.Windows;
 
 namespace RichMarkdownPad.HostApp;
 
@@ -7,20 +11,142 @@ namespace RichMarkdownPad.HostApp;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private string? _currentFilePath;
+
     public MainWindow()
     {
         InitializeComponent();
+        EditorControl.DirtyStateChanged += EditorControl_OnDirtyStateChanged;
         EditorControl.DocumentText = "# RichMarkdownPad\n\nType markdown on the left. Preview is rendered on the right.";
+        UpdateWindowTitle();
     }
 
-    private void EditorControl_OnOpenRequested(object sender, EventArgs e)
+    protected override async void OnClosing(CancelEventArgs e)
     {
-        MessageBox.Show(this, "Open action is handled by host app.", "Host Integration");
+        if (!EditorControl.IsDirty)
+        {
+            base.OnClosing(e);
+            return;
+        }
+
+        var result = MessageBox.Show(
+            this,
+            "You have unsaved changes. Save before exit?",
+            "Unsaved Changes",
+            MessageBoxButton.YesNoCancel,
+            MessageBoxImage.Warning);
+
+        if (result == MessageBoxResult.Cancel)
+        {
+            e.Cancel = true;
+            return;
+        }
+
+        if (result == MessageBoxResult.Yes)
+        {
+            var saveSucceeded = await SaveToFileAsync();
+            if (!saveSucceeded)
+            {
+                e.Cancel = true;
+                return;
+            }
+        }
+
+        base.OnClosing(e);
     }
 
-    private void EditorControl_OnSaveRequested(object sender, EventArgs e)
+    private async void EditorControl_OnOpenRequested(object sender, EventArgs e)
     {
-        MessageBox.Show(this, "Save action is handled by host app.", "Host Integration");
-        EditorControl.MarkDocumentSaved();
+        if (EditorControl.IsDirty)
+        {
+            var result = MessageBox.Show(
+                this,
+                "Current changes are not saved. Continue opening another file?",
+                "Unsaved Changes",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+        }
+
+        var dialog = new OpenFileDialog
+        {
+            Filter = "Markdown files (*.md;*.markdown)|*.md;*.markdown|Text files (*.txt)|*.txt|All files (*.*)|*.*",
+            CheckFileExists = true,
+            Title = "Open Markdown File"
+        };
+
+        if (dialog.ShowDialog(this) != true)
+        {
+            return;
+        }
+
+        try
+        {
+            var text = await File.ReadAllTextAsync(dialog.FileName);
+            _currentFilePath = dialog.FileName;
+            EditorControl.DocumentText = text;
+            UpdateWindowTitle();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, $"Failed to open file.\n{ex.Message}", "Open Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async void EditorControl_OnSaveRequested(object sender, EventArgs e)
+    {
+        await SaveToFileAsync();
+    }
+
+    private void EditorControl_OnDirtyStateChanged(object? sender, bool isDirty)
+    {
+        UpdateWindowTitle();
+    }
+
+    private async Task<bool> SaveToFileAsync()
+    {
+        var targetPath = _currentFilePath;
+        if (string.IsNullOrWhiteSpace(targetPath))
+        {
+            var dialog = new SaveFileDialog
+            {
+                Filter = "Markdown files (*.md)|*.md|Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                DefaultExt = ".md",
+                AddExtension = true,
+                Title = "Save Markdown File"
+            };
+
+            if (dialog.ShowDialog(this) != true)
+            {
+                return false;
+            }
+
+            targetPath = dialog.FileName;
+        }
+
+        try
+        {
+            await File.WriteAllTextAsync(targetPath, EditorControl.DocumentText, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+            _currentFilePath = targetPath;
+            EditorControl.MarkDocumentSaved();
+            UpdateWindowTitle();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, $"Failed to save file.\n{ex.Message}", "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
+    }
+
+    private void UpdateWindowTitle()
+    {
+        var fileName = string.IsNullOrWhiteSpace(_currentFilePath) ? "Untitled" : Path.GetFileName(_currentFilePath);
+        var dirtyMarker = EditorControl.IsDirty ? "*" : string.Empty;
+        Title = $"{dirtyMarker}{fileName} - RichMarkdownPad Host Sample";
     }
 }
