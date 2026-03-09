@@ -5,6 +5,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <PackageId>RichMarkdownPad.Controller</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>sdkikgeneral-spec</Authors>
+    <Company>sdkikgeneral-spec</Company>
+    <Description>Reusable WPF markdown editor controller with live WebView2 preview.</Description>
+    <PackageTags>wpf;markdown;webview2;editor;controller</PackageTags>
+    <PackageProjectUrl>https://github.com/sdkikgeneral-spec/RichMarkdownPad</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sdkikgeneral-spec/RichMarkdownPad</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>

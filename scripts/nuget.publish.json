@@ -1,0 +1,25 @@
+{
+  "project": "src/RichMarkdownPad.Controller/RichMarkdownPad.Controller.csproj",
+  "configuration": "Release",
+  "output": "artifacts/nuget",
+  "skipBuild": false,
+  "push": {
+    "enabled": false,
+    "source": "https://api.nuget.org/v3/index.json",
+    "apiKeyEnvVar": "NUGET_API_KEY",
+    "skipDuplicate": true
+  },
+  "package": {
+    "id": "RichMarkdownPad.Controller",
+    "version": "0.1.0",
+    "authors": "sdkikgeneral-spec",
+    "company": "sdkikgeneral-spec",
+    "description": "Reusable WPF markdown editor controller with live WebView2 preview.",
+    "tags": "wpf;markdown;webview2;editor;controller",
+    "packageProjectUrl": "https://github.com/sdkikgeneral-spec/RichMarkdownPad",
+    "repositoryUrl": "https://github.com/sdkikgeneral-spec/RichMarkdownPad",
+    "repositoryType": "git",
+    "includeSymbols": true,
+    "symbolPackageFormat": "snupkg"
+  }
+}
