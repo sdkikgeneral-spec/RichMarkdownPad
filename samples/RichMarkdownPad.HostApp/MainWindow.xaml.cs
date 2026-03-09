@@ -20,7 +20,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         EditorControl.DirtyStateChanged += EditorControl_OnDirtyStateChanged;
         EditorControl.DocumentText = "# RichMarkdownPad\n\nType markdown on the left. Preview is rendered on the right.";
-        UpdateWindowTitle();
+        UpdateUiState("App Started");
     }
 
     protected override async void OnClosing(CancelEventArgs e)
@@ -83,6 +83,7 @@ public partial class MainWindow : Window
 
         if (dialog.ShowDialog(this) != true)
         {
+            UpdateUiState("Open Canceled");
             return;
         }
 
@@ -91,11 +92,12 @@ public partial class MainWindow : Window
             var text = await _documentFileService.LoadTextAsync(dialog.FileName);
             _currentFilePath = dialog.FileName;
             EditorControl.DocumentText = text;
-            UpdateWindowTitle();
+            UpdateUiState($"Opened: {Path.GetFileName(dialog.FileName)}");
         }
         catch (Exception ex)
         {
             MessageBox.Show(this, $"Failed to open file.\n{ex.Message}", "Open Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            UpdateUiState("Open Failed");
         }
     }
 
@@ -106,7 +108,7 @@ public partial class MainWindow : Window
 
     private void EditorControl_OnDirtyStateChanged(object? sender, bool isDirty)
     {
-        UpdateWindowTitle();
+        UpdateUiState("Edited");
     }
 
     private async Task<bool> SaveToFileAsync()
@@ -124,6 +126,7 @@ public partial class MainWindow : Window
 
             if (dialog.ShowDialog(this) != true)
             {
+                UpdateUiState("Save Canceled");
                 return false;
             }
 
@@ -135,20 +138,25 @@ public partial class MainWindow : Window
             await _documentFileService.SaveTextAsync(targetPath, EditorControl.DocumentText);
             _currentFilePath = targetPath;
             EditorControl.MarkDocumentSaved();
-            UpdateWindowTitle();
+            UpdateUiState($"Saved: {Path.GetFileName(targetPath)}");
             return true;
         }
         catch (Exception ex)
         {
             MessageBox.Show(this, $"Failed to save file.\n{ex.Message}", "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            UpdateUiState("Save Failed");
             return false;
         }
     }
 
-    private void UpdateWindowTitle()
+    private void UpdateUiState(string lastAction)
     {
         var fileName = string.IsNullOrWhiteSpace(_currentFilePath) ? "Untitled" : Path.GetFileName(_currentFilePath);
         var dirtyMarker = EditorControl.IsDirty ? "*" : string.Empty;
+
         Title = $"{dirtyMarker}{fileName} - RichMarkdownPad Host Sample";
+        FileStatusText.Text = $"File: {(_currentFilePath ?? "Untitled")}";
+        DirtyStatusText.Text = $"Dirty: {EditorControl.IsDirty}";
+        LastActionStatusText.Text = $"Last Action: {lastAction}";
     }
 }
