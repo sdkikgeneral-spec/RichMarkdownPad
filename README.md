@@ -1,5 +1,7 @@
 # RichMarkdownPad
 
+Language: Japanese | [English](docs/README_en.md)
+
 WPFでMarkdownを編集し、リアルタイムプレビューを確認できるリッチテキストボックス・コントローラーを開発するプロジェクトです。
 
 ## Project Status
