@@ -67,12 +67,13 @@
   - ホストアプリに埋め込んだ際の連携確認
 
 ## 9. 実装順序（MVP）
-1. `UserControl`シェル（2ペイン）
-2. Controller ViewModelと通知コマンド実装
-3. Markdigレンダラー実装
-4. WebView2連携
-5. ホスト連携インターフェース実装
-6. 例外処理とテスト
+- [x] `UserControl`シェル（2ペイン）
+- [x] Controller ViewModelと通知コマンド実装
+- [x] Markdigレンダラー実装
+- [x] WebView2連携
+- [x] ホスト連携インターフェース実装
+- [x] 例外処理（MVP範囲）
+- [ ] テスト実装（単体テスト/結合テスト）
 
 ## 10. 更新履歴
 - 2026-03-09: 初版作成（specsheet.mdから分離）
