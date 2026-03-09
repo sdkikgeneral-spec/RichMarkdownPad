@@ -5,4 +5,7 @@
   <Folder Name="/src/">
     <Project Path="src/RichMarkdownPad.Controller/RichMarkdownPad.Controller.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RichMarkdownPad.HostApp.Tests/RichMarkdownPad.HostApp.Tests.csproj" />
+  </Folder>
 </Solution>

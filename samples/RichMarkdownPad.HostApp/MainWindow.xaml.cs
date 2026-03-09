@@ -1,8 +1,8 @@
 ﻿using Microsoft.Win32;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
 using System.Windows;
+using RichMarkdownPad.HostApp.Services;
 
 namespace RichMarkdownPad.HostApp;
 
@@ -12,9 +12,11 @@ namespace RichMarkdownPad.HostApp;
 public partial class MainWindow : Window
 {
     private string? _currentFilePath;
+    private readonly IDocumentFileService _documentFileService;
 
     public MainWindow()
     {
+        _documentFileService = new DocumentFileService();
         InitializeComponent();
         EditorControl.DirtyStateChanged += EditorControl_OnDirtyStateChanged;
         EditorControl.DocumentText = "# RichMarkdownPad\n\nType markdown on the left. Preview is rendered on the right.";
@@ -86,7 +88,7 @@ public partial class MainWindow : Window
 
         try
         {
-            var text = await File.ReadAllTextAsync(dialog.FileName);
+            var text = await _documentFileService.LoadTextAsync(dialog.FileName);
             _currentFilePath = dialog.FileName;
             EditorControl.DocumentText = text;
             UpdateWindowTitle();
@@ -130,7 +132,7 @@ public partial class MainWindow : Window
 
         try
         {
-            await File.WriteAllTextAsync(targetPath, EditorControl.DocumentText, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+            await _documentFileService.SaveTextAsync(targetPath, EditorControl.DocumentText);
             _currentFilePath = targetPath;
             EditorControl.MarkDocumentSaved();
             UpdateWindowTitle();
