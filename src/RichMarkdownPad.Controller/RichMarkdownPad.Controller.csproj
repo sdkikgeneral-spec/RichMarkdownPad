@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <PackageId>RichMarkdownPad.Controller</PackageId>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Authors>sdkikgeneral-spec</Authors>
     <Company>sdkikgeneral-spec</Company>
     <Description>Reusable WPF markdown editor controller with live WebView2 preview.</Description>
