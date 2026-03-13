@@ -26,16 +26,45 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="0"
-                     Margin="8"
-                     VerticalScrollBarVisibility="Auto"
-                     HorizontalScrollBarVisibility="Auto"
-                     AcceptsReturn="True"
-                     AcceptsTab="True"
-                     FontFamily="Consolas"
-                     FontSize="14"
-                     TextWrapping="NoWrap"
-                     Text="{Binding DocumentText, UpdateSourceTrigger=PropertyChanged}" />
+            <Grid Grid.Column="0" Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- 行番号ガター -->
+                <Border Grid.Column="0"
+                        Background="#F5F5F5"
+                        BorderBrush="#DDD"
+                        BorderThickness="1,1,1,1">
+                    <ScrollViewer x:Name="LineNumberScroller"
+                                  VerticalScrollBarVisibility="Hidden"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  IsHitTestVisible="False"
+                                  Focusable="False">
+                        <TextBlock x:Name="LineNumberBlock"
+                                   FontFamily="Consolas"
+                                   FontSize="14"
+                                   TextAlignment="Right"
+                                   Padding="6,2,8,2"
+                                   Foreground="#999" />
+                    </ScrollViewer>
+                </Border>
+
+                <!-- エディター -->
+                <TextBox x:Name="Editor"
+                         Grid.Column="1"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         AcceptsReturn="True"
+                         AcceptsTab="True"
+                         FontFamily="Consolas"
+                         FontSize="14"
+                         TextWrapping="NoWrap"
+                         Padding="6,2,4,2"
+                         BorderThickness="0,1,1,1"
+                         Text="{Binding DocumentText, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
 
             <GridSplitter Grid.Column="1"
                           Width="6"

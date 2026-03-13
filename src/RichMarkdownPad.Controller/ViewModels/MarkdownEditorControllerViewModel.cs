@@ -106,12 +106,14 @@ public sealed class MarkdownEditorControllerViewModel : INotifyPropertyChanged, 
         _previewCts?.Cancel();
         _previewCts?.Dispose();
         _previewCts = new CancellationTokenSource();
+        var token = _previewCts.Token;
 
         try
         {
-            await Task.Delay(PreviewDebounceMilliseconds, _previewCts.Token);
+            await Task.Delay(PreviewDebounceMilliseconds, token);
 
-            var htmlBody = _markdownRenderer.Render(_documentText);
+            var text = _documentText;
+            var htmlBody = await Task.Run(() => _markdownRenderer.Render(text), token);
             HtmlPreview = BuildHtmlDocument(htmlBody);
         }
         catch (OperationCanceledException)
